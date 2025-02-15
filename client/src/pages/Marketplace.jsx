@@ -4,7 +4,7 @@ import Form from "../Components/Form";
 import { ethers } from "ethers";
 
 export default function Marketplace() {
-  const contractAddress = "0x4a7d826851EC31677eC5cCC569a1FBbb6582abee";
+  const contractAddress = "0xc452e0ec891030167940169973EAC6cFC7dfbb12";
   const contractABI = [
     {
       inputs: [],
@@ -318,7 +318,6 @@ export default function Marketplace() {
       console.error("Erreur lors de la mise en vente :", error);
     }
   };
-
   return (
     <div>
       <div className="relative isolate px-6 lg:px-8">
@@ -336,7 +335,7 @@ export default function Marketplace() {
         </div>
       </div>
       <div className="px-30 lg:px-8">
-        <Item />
+        <Item items={items} />
         <Form listItem={listItem} />
       </div>
     </div>

@@ -4,7 +4,7 @@ import Form from "../Components/Form";
 import { ethers } from "ethers";
 
 export default function Marketplace() {
-  const contractAddress = "0xc452e0ec891030167940169973EAC6cFC7dfbb12";
+  const contractAddress = "0x1c4aC9C670fA3c85E7c28634b28D6F67341dE3d5";
   const contractABI = [
     {
       inputs: [],

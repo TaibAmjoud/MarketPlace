@@ -54,16 +54,16 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="bg-white">
-        <div className="mx-auto grid max-w-7xl gap-20 px-6 lg:px-8 xl:grid-cols-3">
-          <div className="max-w-xl">
-            <h2 className="text-center text-3xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-4xl">
+      <div className="bg-whit py-24 sm:py-2">
+        <div className="mx-auto max-w">
+          <div className="mx-auto max-w-xl">
+            <h2 className="text-center text-2xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-4xl">
               Notre team
             </h2>
           </div>
           <ul
             role="list"
-            className="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-2"
+            className="pt-12 mx-auto max-w-2xl grid gap-x-60 gap-y-12 sm:grid-cols-2 sm:gap-y-16 xl:col-span-5"
           >
             {people.map((person) => (
               <li key={person.name}>
@@ -88,7 +88,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="bg-white py-24 sm:py-24">
+      <div className="bg-white py-24 sm:py-12">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <h2 className="text-center text-3xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-4xl">
             Tech Stack

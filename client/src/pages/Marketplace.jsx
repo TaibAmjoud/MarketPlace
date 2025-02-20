@@ -2,9 +2,10 @@ import React, { use, useEffect, useState } from "react";
 import Item from "../Components/Item";
 import Form from "../Components/Form";
 import { ethers } from "ethers";
-
+import OwnedItems from "../Components/OwnedItems";
+ 
 export default function Marketplace() {
-  const contractAddress = "0x1c4aC9C670fA3c85E7c28634b28D6F67341dE3d5";
+  const contractAddress = "0xb36942B274528C4388af286ECada546781d8b287";
   const contractABI = [
     {
       inputs: [],
@@ -221,56 +222,54 @@ export default function Marketplace() {
       constant: true,
     },
   ];
-
+ 
   const [provider, setProvider] = useState(null);
   const [account, setAccount] = useState("");
   const [signer, setSigner] = useState(null);
   const [contract, setContract] = useState(null);
   const [items, setItems] = useState([]);
   const [ownedItems, setownedItems] = useState([]);
-
+ 
   useEffect(() => {
     const init = async () => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       setProvider(provider);
-
+ 
       window.ethereum.on("accountsChanged", async (accounts) => {
         setAccount(accounts[0]);
-
+ 
         const signer = provider.getSigner();
         setSigner(signer);
-
+ 
         const contract = new ethers.Contract(
           contractAddress,
           contractABI,
           signer
         );
-
         setContract(contract);
         loadItems(contract);
-        loadOwnedItems(contract, account);
+        loadOwnedItems(contract, accounts[0]);
       });
-
+ 
       const accounts = await provider.send("eth_requestAccounts", []);
       setAccount(accounts[0]);
-
+ 
       const signer = provider.getSigner();
       setSigner(signer);
-
+ 
       const contract = new ethers.Contract(
         contractAddress,
         contractABI,
         signer
       );
-
+ 
       setContract(contract);
       loadItems(contract);
-      loadOwnedItems(contract, account);
+      loadOwnedItems(contract, accounts[0]);
     };
-
     init();
   }, []);
-
+ 
   const loadItems = async (contract) => {
     const itemcount = await contract.itemCount();
     let items = [];
@@ -280,18 +279,18 @@ export default function Marketplace() {
     }
     setItems(items);
   };
-
+ 
   const loadOwnedItems = async (contract, owner) => {
-    const ownedItemsIDs = await contract.getItemsByOwner(owner);
+    const ownedItemIds = await contract.getOwnedItems(owner);
     let ownedItems = [];
-    for (let i = 1; i < ownedItems.length; i++) {
-      const item = await contract.items(ownedItemsIDs[i]);
+    for (let i = 0; i < ownedItemIds.length; i++) {
+      const item = await contract.items(ownedItemIds[i]);
       ownedItems.push(item);
     }
-
+ 
     setownedItems(ownedItems);
   };
-
+ 
   const listItem = async (name, description, price) => {
     if (!contract) {
       console.error("Le contrat n'est pas chargé");
@@ -302,7 +301,7 @@ export default function Marketplace() {
       alert("Veuillez entrer un prix valide en ETH.");
       return;
     }
-
+ 
     try {
       const tx = await contract.listItem(
         name,
@@ -318,6 +317,7 @@ export default function Marketplace() {
       console.error("Erreur lors de la mise en vente :", error);
     }
   };
+ 
   return (
     <div>
       <div className="relative isolate px-6 lg:px-8">
@@ -335,8 +335,21 @@ export default function Marketplace() {
         </div>
       </div>
       <div className="px-30 lg:px-8">
-        <Item items={items} />
+        <Item
+          items={items}
+          account={account}
+          contract={contract}
+          loadItems={loadItems}
+          loadOwnedItems={loadOwnedItems}
+        />
         <Form listItem={listItem} />
+        <OwnedItems
+          items={ownedItems}
+          contract={contract}
+          account={account}
+          loadItems={loadItems}
+          loadOwnedItems={loadOwnedItems}
+        />
       </div>
     </div>
   );
